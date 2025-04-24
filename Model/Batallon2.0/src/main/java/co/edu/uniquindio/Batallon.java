@@ -6,12 +6,10 @@ import java.util.*;
 public class Batallon {
     private String nombre;
     private String id;
-
     private LinkedList<VehiculoApoyo> listVehiculosApoyo;
     private LinkedList<VehiculoBlindado> listVehiculosBlindados;
     private LinkedList<VehiculoTransporteTropa> listVehiculosTransporteTropa;
     private LinkedList<Soldado>listSoldados;
-
     private LinkedList<Mision> listMisiones;
     private LinkedList<Soldado> listpersonal;
 
@@ -19,7 +17,6 @@ public class Batallon {
     public Batallon(String nombre, String id) {
         this.nombre = nombre;
         this.id = id;
-
         this.listVehiculosApoyo = new LinkedList<>();
         this.listVehiculosBlindados = new LinkedList<>();
         this.listVehiculosTransporteTropa = new LinkedList<>();
@@ -30,7 +27,6 @@ public class Batallon {
 
     public LinkedList<Vehiculo> obtenerVehiculosCantMisiones() {
         LinkedList<Vehiculo> vehiculosMisionesCompletadas = new LinkedList<>();
-
 
         for (VehiculoApoyo vehiculo : listVehiculosApoyo) {
             if (vehiculo.getMisionesCompletadas() > 50){
@@ -52,6 +48,7 @@ public class Batallon {
 
         return vehiculosMisionesCompletadas;
     }
+    
     public boolean registrarMision(LocalDate fecha, LocalDate fechaInicio, LocalDate fechafin, String ubicacion, LinkedList<Soldado> listPersonal, String idVehiculoMision ){
         boolean flag = false;
         String cantidadMisiones =String.valueOf(listMisiones.size()+1);
@@ -77,7 +74,6 @@ public class Batallon {
         }
         return misionesFiltro;
     }
-
 
     public double kilometrajePromedioTropas (){
         double sumaTropas = 0;
@@ -305,7 +301,6 @@ public class Batallon {
         }
         return resultado;
     }
-
 
 
     public List<Soldado> obtenerSoldadosDisponiblesPorRango(RangoMilitar rangoBuscado) {
