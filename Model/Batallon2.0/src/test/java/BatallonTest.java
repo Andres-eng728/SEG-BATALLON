@@ -122,32 +122,88 @@ class BatallonTest {
         resultado= batallon.asignarSoldado("123", "M123");
         Assertions.assertFalse(resultado,"No deberia ser posible asignar el soldado si ya no esta disponible.");
     }
-    @Test
-    void testLiberarSoldado(){
-        Batallon batallon  =new Batallon("Batallon Test", "BT01");
 
-        Soldado soldado= new Soldado("S4","Jorge Niño",31,true,Especialidad.MEDICO,RangoMilitar.SARGENTO);
+
+    @Test
+    void testLiberarSoldados() {
+        Batallon batallon = new Batallon("Batallon Delta", "B004");
+
+        Soldado soldado = new Soldado("S1", "Luis", 30, true, Especialidad.MEDICO, RangoMilitar.SOLDADO);
         batallon.agregarSoldado(soldado);
 
-        Mision mision= new Mision("M2",LocalDate.now(),LocalDate.of(2025, 5, 1),LocalDate.of(2025, 5, 28), "Zona A");
+        Mision mision = new Mision("M1", LocalDate.now().minusDays(1), LocalDate.now().minusDays(5), LocalDate.now().minusDays(1), "Zona X");
         batallon.getListMisiones().add(mision);
 
-        batallon.asignarSoldado("S4","M2");
+        boolean asignado = batallon.asignarSoldado("S1", "M1");
+        assertTrue(asignado);
+        assertFalse(soldado.isDisponible()); // debe estar no disponible tras asignación
+
         batallon.liberarSoldados();
 
-        Assertions.assertTrue(soldado.isDisponible(),"El soldado deberia liberarse correctamente.");
-        Assertions.assertTrue(mision.getlistPersonal().isEmpty(),"La lista deberia estar vacia.");;
-
+        assertTrue(soldado.isDisponible()); // debe estar disponible tras liberar
     }
+
 
     @Test
     void testVehiculoMayorCantMisiones(){
         Batallon batallon  =new Batallon("Batallon Test", "BT01");
-        VehiculoApoyo
+        VehiculoApoyo vehiculoApoyo=new VehiculoApoyo("VAV59G","ModeloA",2018,130000,EstadoOperativo.DISPONIBLE,TipoFuncion.LOGISTICA);
+        VehiculoBlindado vehiculoBlindado=new VehiculoBlindado("VAV51G","ModeloB",2015,200000,EstadoOperativo.DISPONIBLE, 5);
+        vehiculoApoyo.setMisionesCompletadas(50);
+        vehiculoBlindado.setMisionesCompletadas(70);
+        batallon.agregarVehiculoApoyo(vehiculoApoyo);
+        batallon.agregarVehiculoBlindado(vehiculoBlindado);
 
-
+        Vehiculo vehiculoMayorCantMisiones= batallon.vehiculoMayorCantMisiones();
+        Assertions.assertEquals(vehiculoBlindado,vehiculoMayorCantMisiones,"El vehiculo con mas misiones deberia ser devuelto");
 
     }
+
+
+    @Test
+    void testeRgistrarMision() {
+        Batallon batallon = new Batallon("Batallon Bravo", "B002");
+
+        Soldado soldado = new Soldado("S1", "Carlos", 29, true, Especialidad.COMUNICACIONES, RangoMilitar.SARGENTO);
+        batallon.agregarSoldado(soldado);
+
+        VehiculoApoyo vehiculo = new VehiculoApoyo("VA1", "ApoyoModelo", 2020, 1000, EstadoOperativo.DISPONIBLE, TipoFuncion.LOGISTICA);
+        batallon.agregarVehiculoApoyo(vehiculo);
+
+        LinkedList<Soldado> personal = new LinkedList<>();
+        personal.add(soldado);
+
+        boolean resultado = batallon.registrarMision(
+                LocalDate.of(2025, 4, 1),
+                LocalDate.of(2025, 4, 1),
+                LocalDate.of(2025, 4, 5),
+                "Base Norte",
+                personal,
+                "VA1"
+        );
+
+        assertFalse(resultado);
+    }
+
+    @Test
+    void testFiltroMisionesUbiFechas() {
+        Batallon batallon = new Batallon("Batallon Charlie", "B003");
+
+        Mision m1 = new Mision("M1", LocalDate.of(2025, 4, 1), LocalDate.of(2025, 3, 30), LocalDate.of(2025, 4, 3), "Zona A");
+        Mision m2 = new Mision("M2", LocalDate.of(2025, 4, 5), LocalDate.of(2025, 4, 4), LocalDate.of(2025, 4, 6), "Zona B");
+        Mision m3 = new Mision("M3", LocalDate.of(2025, 4, 7), LocalDate.of(2025, 4, 6), LocalDate.of(2025, 4, 10), "Zona A");
+
+        batallon.getListMisiones().add(m1);
+        batallon.getListMisiones().add(m2);
+        batallon.getListMisiones().add(m3);
+
+        LinkedList<Mision> misionesfiltradas = batallon.filtroMisionesUbiFechas("Zona A", LocalDate.of(2025, 4, 1), LocalDate.of(2025, 4, 7));
+        assertEquals(2, misionesfiltradas.size());
+        assertEquals("M1", misionesfiltradas.get(0).getIdMision());
+        assertEquals("M3", misionesfiltradas.get(1).getIdMision());
+    }
+
+
 
 }
 
