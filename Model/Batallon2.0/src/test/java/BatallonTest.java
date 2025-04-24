@@ -13,23 +13,12 @@ import org.junit.jupiter.api.BeforeAll;
 class BatallonTest {
     private static final Logger LOG = Logger.getLogger(BatallonTest.class.getName());
     Batallon batallon = new Batallon("Batallón Central", "B001");
-    Soldado s1 = new Soldado("13", "Martín", 25, true, Especialidad.COMUNICACIONES, RangoMilitar.SOLDADO);
-    Soldado s2 = new Soldado("14", "Laura", 28, true, Especialidad.MEDICO, RangoMilitar.CABO);
-    Soldado s3 = new Soldado("15", "Carlos", 30, true, Especialidad.LOGISTICA, RangoMilitar.CABO);
-    Soldado s4 = new Soldado("16", "Ana", 22, true, Especialidad.MEDICO, RangoMilitar.SOLDADO);
-    Soldado s5 = new Soldado("17", "Luis", 35, true, Especialidad.COMUNICACIONES, RangoMilitar.SARGENTO);
-
-
-
-
+    
     @Test
 
     void testBuscarSoldadoPorId() {
 
-
-        Batallon batallon= new Batallon("mali","1345");
         Soldado newSoldado = new Soldado("13","martin",25,true, Especialidad.COMUNICACIONES, RangoMilitar.SOLDADO);
-
         batallon.agregarSoldado(newSoldado);
 
         Soldado encontrado = Batallon.buscarSoldadoPorId(batallon.getListSoldados(), "13");
@@ -53,8 +42,6 @@ class BatallonTest {
 
     @Test
     public void testBuscarPorEspecialidad() {
-        Batallon batallon = new Batallon("ff","13456");
-
         Soldado s1 = new Soldado("1", "Carlos", 25, true, Especialidad.COMUNICACIONES, RangoMilitar.SOLDADO);
         Soldado s2 = new Soldado("2", "Laura", 30, true, Especialidad.MEDICO, RangoMilitar.CABO);
         Soldado s3 = new Soldado("3", "Andrés", 27, true, Especialidad.COMUNICACIONES, RangoMilitar.SARGENTO);
@@ -75,16 +62,10 @@ class BatallonTest {
 
     @Test
     void testObtenerSoldadosDisponiblesPorRango() {
-        Batallon batallon = new Batallon("Batallón Test", "BT01");
-
-
+      
         batallon.agregarSoldado(new Soldado("10", "Carlos", 30, false, Especialidad.LOGISTICA, RangoMilitar.SARGENTO));
-
-
         batallon.agregarSoldado(new Soldado("11", "Laura", 28, true, Especialidad.MEDICO, RangoMilitar.CABO));
-
         batallon.agregarSoldado(new Soldado("17", "Luis", 35, true, Especialidad.COMUNICACIONES, RangoMilitar.SARGENTO));
-
         List<Soldado> sargentosDisponibles = batallon.obtenerSoldadosDisponiblesPorRango(RangoMilitar.SARGENTO);
 
         assertEquals(1, sargentosDisponibles.size());
@@ -108,14 +89,12 @@ class BatallonTest {
 
     @Test
     void testAsignarSoldado(){
-        Batallon batallon =new Batallon("Batallon Test", "BT01");
         Soldado soldado = new Soldado("123", "Juan Zapata",29,true,Especialidad.MEDICO,RangoMilitar.SARGENTO);
         batallon.agregarSoldado(soldado);
-
         Mision mision= new Mision("M123",LocalDate.of(2025, 4, 1),LocalDate.of(2025, 4, 1), LocalDate.of(2025, 4, 10), "Zona A");
         batallon.getListMisiones().add(mision);
-
         boolean resultado= batallon.asignarSoldado("123", "M123");
+        
         Assertions.assertTrue(resultado,"El soldado deberia asignarse correctamente.");
         Assertions.assertFalse(soldado.isDisponible(),"El soldado deberia marcarse como no disponible.");
 
@@ -126,27 +105,22 @@ class BatallonTest {
 
     @Test
     void testLiberarSoldados() {
-        Batallon batallon = new Batallon("Batallon Delta", "B004");
-
         Soldado soldado = new Soldado("S1", "Luis", 30, true, Especialidad.MEDICO, RangoMilitar.SOLDADO);
         batallon.agregarSoldado(soldado);
-
         Mision mision = new Mision("M1", LocalDate.now().minusDays(1), LocalDate.now().minusDays(5), LocalDate.now().minusDays(1), "Zona X");
         batallon.getListMisiones().add(mision);
-
         boolean asignado = batallon.asignarSoldado("S1", "M1");
+        
         assertTrue(asignado);
         assertFalse(soldado.isDisponible()); // debe estar no disponible tras asignación
 
         batallon.liberarSoldados();
-
         assertTrue(soldado.isDisponible()); // debe estar disponible tras liberar
     }
 
 
     @Test
     void testVehiculoMayorCantMisiones(){
-        Batallon batallon  =new Batallon("Batallon Test", "BT01");
         VehiculoApoyo vehiculoApoyo=new VehiculoApoyo("VAV59G","ModeloA",2018,130000,EstadoOperativo.DISPONIBLE,TipoFuncion.LOGISTICA);
         VehiculoBlindado vehiculoBlindado=new VehiculoBlindado("VAV51G","ModeloB",2015,200000,EstadoOperativo.DISPONIBLE, 5);
         vehiculoApoyo.setMisionesCompletadas(50);
@@ -162,14 +136,11 @@ class BatallonTest {
 
     @Test
     void testeRgistrarMision() {
-        Batallon batallon = new Batallon("Batallon Bravo", "B002");
 
         Soldado soldado = new Soldado("S1", "Carlos", 29, true, Especialidad.COMUNICACIONES, RangoMilitar.SARGENTO);
         batallon.agregarSoldado(soldado);
-
         VehiculoApoyo vehiculo = new VehiculoApoyo("VA1", "ApoyoModelo", 2020, 1000, EstadoOperativo.DISPONIBLE, TipoFuncion.LOGISTICA);
         batallon.agregarVehiculoApoyo(vehiculo);
-
         LinkedList<Soldado> personal = new LinkedList<>();
         personal.add(soldado);
 
@@ -187,8 +158,7 @@ class BatallonTest {
 
     @Test
     void testFiltroMisionesUbiFechas() {
-        Batallon batallon = new Batallon("Batallon Charlie", "B003");
-
+    
         Mision m1 = new Mision("M1", LocalDate.of(2025, 4, 1), LocalDate.of(2025, 3, 30), LocalDate.of(2025, 4, 3), "Zona A");
         Mision m2 = new Mision("M2", LocalDate.of(2025, 4, 5), LocalDate.of(2025, 4, 4), LocalDate.of(2025, 4, 6), "Zona B");
         Mision m3 = new Mision("M3", LocalDate.of(2025, 4, 7), LocalDate.of(2025, 4, 6), LocalDate.of(2025, 4, 10), "Zona A");
