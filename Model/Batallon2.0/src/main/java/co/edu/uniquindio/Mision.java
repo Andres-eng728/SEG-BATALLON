@@ -12,7 +12,6 @@ public class Mision {
     private String ubicacion;
     private Soldado soldado;
     private LinkedList<Soldado> listpersonal;
-
     private Vehiculo theVehiculo;
 
     public Mision(String id, LocalDate fecha,LocalDate fechaInicio,LocalDate fechaFin, String ubicacion) {
