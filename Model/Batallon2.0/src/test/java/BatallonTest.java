@@ -1,7 +1,6 @@
 import co.edu.uniquindio.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedList;
