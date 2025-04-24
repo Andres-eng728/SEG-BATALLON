@@ -19,11 +19,10 @@ class BatallonTest {
 
         Soldado newSoldado = new Soldado("13","martin",25,true, Especialidad.COMUNICACIONES, RangoMilitar.SOLDADO);
         batallon.agregarSoldado(newSoldado);
-
         Soldado encontrado = Batallon.buscarSoldadoPorId(batallon.getListSoldados(), "13");
+       
         assertNotNull(encontrado);
         assertEquals("13", encontrado.getIdSoldado());
-
         assertNull(Batallon.buscarSoldadoPorId(batallon.getListSoldados(), "XXX"));
     }
 
